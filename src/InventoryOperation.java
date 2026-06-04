@@ -10,9 +10,16 @@ public class InventoryOperation {
         this.item = item;
     }
 
-
-
-
-
-
+    public OperationType getType() {
+        return type;
+    }
+    public int getKey() {
+        return key;
+    }
+    public int getQuantity() {
+        return quantity;
+    }
+    public InventoryItem getItem() {
+        return item;
+    }
 }
