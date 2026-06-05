@@ -37,11 +37,12 @@ public class DataGenerator {
       * keyUniverse: Rango de claves posibles. [1, keyUniverse]
       * seed: Semilla para reproducibilidad
       */
-    public static ArrayList<InventoryItem> generateOperations(int m,int keyUniverse, long seed){
+    public ArrayList<InventoryOperation> generateOperations(int m,int keyUniverse, long seed){
         StdRandom.setSeed(seed);
         // Distribución: Purchase 0.35, Query 0.3, Lend 0.15, Receive 0.1, Dispose 0.1
         // Purchase, Lend, Receive: StdRandom.uniformInt(1,6);
         // Query, Dispose: 0;
         // Purchase si no esta debe crear nuevo (...)
+        return new ArrayList<>();
     }
 }
