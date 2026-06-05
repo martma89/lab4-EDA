@@ -26,19 +26,16 @@ public class BSTInventoryIndex implements InventoryIndex{
 
     @Override
     public Iterable<Integer> keys() {
-        return null;
+        return st.keys();
     }
 
     @Override
     public int size() {
-        return 0;
+        return st.size();
     }
 
     @Override
     public int height() {
-        return 0;
+        return st.height();
     }
-
-
-    // Debe delegar sus operaciones en princeton
 }

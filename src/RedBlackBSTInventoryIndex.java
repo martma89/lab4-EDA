@@ -1,6 +1,29 @@
 import edu.princeton.cs.algs4.RedBlackBST;
 
-public class RedBlackBSTInventoryIndex {
+public class RedBlackBSTInventoryIndex implements InventoryIndex {
     private RedBlackBST<Integer, InventoryItem> st;
-    // Debe delegar sus operaciones en princeton
+    @Override
+    public void put (Integer key, InventoryItem value) {
+        st.put(key, value);
+    }
+    @Override
+    public InventoryItem get (Integer key) {
+        return st.get(key);
+    }
+    @Override
+    public void delete (Integer key) {
+        st.delete(key);
+    }
+    @Override
+    public boolean contains (Integer key) {
+        return st.contains(key);
+    }
+    @Override
+    public Iterable <Integer> keys () {
+        return st.keys();
+    }
+    @Override
+    public int height() {
+        return st.height();
+    }
 }
