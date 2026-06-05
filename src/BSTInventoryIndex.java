@@ -1,6 +1,6 @@
 import edu.princeton.cs.algs4.BST;
 
-public class BSTInventoryIndex implements InventoryIndex.InventoryIndex{
+public class BSTInventoryIndex implements InventoryIndex{
     private BST<Integer, InventoryItem> st;
     // revisar todo esto
 
@@ -11,7 +11,7 @@ public class BSTInventoryIndex implements InventoryIndex.InventoryIndex{
 
     @Override
     public InventoryItem get(Integer key) {
-        return null;
+        return st.get(key);
     }
 
     @Override
