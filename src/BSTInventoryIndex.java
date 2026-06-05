@@ -16,7 +16,7 @@ public class BSTInventoryIndex implements InventoryIndex{
 
     @Override
     public void delete(Integer key) {
-
+        st.delete(key);
     }
 
     @Override
