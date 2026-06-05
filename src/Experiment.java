@@ -1,4 +1,5 @@
 
+import edu.princeton.cs.algs4.Out;
 import edu.princeton.cs.algs4.RedBlackBST;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StopwatchCPU;
@@ -58,6 +59,7 @@ public class Experiment {
     public static void main (String[] args) {
         int[] tamannos = {12, 13, 14, 15, 16, 17, 18, 19};
         for (int i=0;i<tamannos.length;i++){
+            Out csv = new Out();
             int t = tamannos[i];
             for(int j=0;j<30;j++){
                 int m = (int)Math.pow(2,t);
@@ -102,6 +104,7 @@ public class Experiment {
                 double elapsed2 = timer2.elapsedTime();
 
             }
+            csv.close(  );
         }
 
     }
