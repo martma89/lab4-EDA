@@ -13,6 +13,9 @@ public class InventoryItem {
     public int getId() {
         return id;
     }
+    public String getName() {
+        return name;
+    }
     public int getStockTotal() {
         return stockTotal;
     }
@@ -30,16 +33,14 @@ public class InventoryItem {
     }
     public void addStock(int ItemId, int quantity){
         // No stock negativo
-        // TODO: Falta ItemId
-        if(quantity>=0){
+        if(this.id==ItemId && quantity>=0){
             stockTotal += quantity;
             stockAvailable += quantity;
         }
     }
     public boolean lend(int ItemId, int quantity){
         // No se puede prestar más de lo disponible
-        // Falta ItemId
-        if(stockAvailable>=quantity && quantity>=0) {
+        if(this.id==ItemId && stockAvailable>=quantity && quantity>=0) {
             stockOnLoan += quantity;
             stockAvailable -= quantity;
             return true;
@@ -48,8 +49,7 @@ public class InventoryItem {
     }
     public boolean receive(int ItemId, int quantity){
         // No se puede prestar más de lo prestado
-        // Falta ItemId
-        if(stockOnLoan>=quantity && quantity>=0) {
+        if(this.id==ItemId && stockOnLoan>=quantity && quantity>=0) {
             stockOnLoan -= quantity;
             stockAvailable += quantity;
             return true;
