@@ -111,6 +111,7 @@ public class Experiment {
         int[] size = {12, 13, 14, 15, 16, 17, 18, 19};
         for (int i=0;i<size.length;i++){
             Out csv = new Out();
+            csv.println("instancia,estructura,m,purchase_total,query_total,lend_total,receive_total,dispose_total,query_successful,query_failed,lend_successful,lend_failed,receive_successful,receive_failed,final_size,final_height,elapsed_seconds");
             int t = size[i];
             int m = (int)Math.pow(2,t);
             int keyUniverse = 4*m;
