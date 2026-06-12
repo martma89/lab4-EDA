@@ -26,4 +26,9 @@ public class RedBlackBSTInventoryIndex implements InventoryIndex {
     public int height() {
         return st.height();
     }
+    @Override
+    public int size() {
+        return st.size();
+    }
+
 }

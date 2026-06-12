@@ -1,4 +1,3 @@
-import 
 public class InventoryItem {
     int id, stockTotal, stockAvailable, stockOnLoan;
     String name, category, location;
@@ -31,10 +30,10 @@ public class InventoryItem {
     }
     public void addStock(int ItemId, int quantity){
         // No stock negativo
-        // Falta ItemId
+        // TODO: Falta ItemId
         if(quantity>=0){
-        stockTotal += quantity;
-        stockAvailable += quantity;
+            stockTotal += quantity;
+            stockAvailable += quantity;
         }
     }
     public boolean lend(int ItemId, int quantity){
