@@ -4,12 +4,7 @@ import edu.princeton.cs.algs4.StopwatchCPU;
 import java.util.ArrayList;
 
 public class Experiment {
-    public static int query_successful,query_failed,lend_successful,lend_failed,receive_successful,receive_failed;
-    public static int purchase_total, query_total, lend_total, receive_total, dispose_total;
-    public static void resetStats() {
-        purchase_total = 0; query_total = 0; lend_total = 0; receive_total = 0; dispose_total = 0;
-        query_successful = 0; query_failed = 0; lend_successful = 0; lend_failed = 0; receive_successful = 0; receive_failed = 0;
-    }
+    public static public static Contador contador;
     public static void executePurchase(InventoryIndex index,InventoryOperation op){
         if(!index.contains(op.getKey())){
             index.put(op.getKey(),op.getItem());
@@ -19,45 +14,45 @@ public class Experiment {
             item.addStock(op.getKey(),op.getQuantity());
             index.put(op.getKey(),item);
         }
-        purchase_total++;
+        contador.purchase_total++;
     }
     public static void executeQuery (InventoryIndex index,InventoryOperation operation){
         if(index.contains(operation.getKey())){
             InventoryItem item = index.get(operation.getKey());
-            query_successful++;
+            contador.query_successful++;
         }
-        else query_failed++;
+        else contador.query_failed++;
 
-        query_total++;
+        contador.query_total++;
     }
     public static void executeLend (InventoryIndex index,InventoryOperation operation){
         InventoryItem item = index.get(operation.getKey());
         if(item!=null && item.getStockAvailable()>=operation.getQuantity()){
             item.lend(operation.getKey(),operation.getQuantity());
             index.put(operation.getKey(),item);
-            lend_successful++;
+            contador.lend_successful++;
         }
-        else lend_failed++;
+        else contador.lend_failed++;
 
-        lend_total++;
+        contador.lend_total++;
     }
     public static void executeReceive(InventoryIndex index,InventoryOperation operation){
         InventoryItem item = index.get(operation.getKey());
         if(item!=null && item.getStockOnLoan()>=operation.getQuantity()){
             item.receive(operation.getKey(),operation.getQuantity());
             index.put(operation.getKey(),item);
-            receive_successful++;
+            contador.receive_successful++;
         }
-        else receive_failed++;
+        else contador.receive_failed++;
 
-        receive_total++;
+        contador.receive_total++;
     }
     public static void executeDispose (InventoryIndex index,InventoryOperation operation){
         InventoryItem item = index.get(operation.getKey());
         if(item!=null){
             index.delete(operation.getKey());
         }
-        dispose_total++;
+        contador.dispose_total++;
     }
     public static double medir(ArrayList<InventoryOperation> operations, InventoryIndex index){
         StopwatchCPU timer = new StopwatchCPU();
@@ -102,7 +97,7 @@ public class Experiment {
                 System.err.println("Error de validación: Diferencia de resultados entre BST y RedBlackBST en key " + key);
             }
         }
-        int opsTotalesEjecutadas = purchase_total + query_total + lend_total + receive_total + dispose_total;
+        int opsTotalesEjecutadas = contador.purchase_total + contador.query_total + contador.lend_total + contador.receive_total + contador.dispose_total;
         if (opsTotalesEjecutadas != m){
             System.err.println("Error de validación: Se ejecutaron " + opsTotalesEjecutadas + " en vez de "+m+" operaciones.");
         }
@@ -127,23 +122,23 @@ public class Experiment {
                 String estructura = "BST";
                 int final_size = BST.size();
                 int final_height = BST.height();
-                csv.println(instancia+ "," +estructura+ "," +m+ "," +purchase_total+ "," +
-                        query_total+ "," +lend_total+ "," +receive_total+ "," +
-                        dispose_total+ "," +query_successful+ "," +query_failed+ "," +
-                        lend_successful+ "," +lend_failed+ "," +receive_successful+ "," +
-                        receive_failed+ "," +final_size+ "," +final_height+ "," +elapsed_seconds);
-                resetStats();
+                csv.println(instancia+ "," +estructura+ "," + m + "," +contador.purchase_total+ "," +
+                        contador.query_total+ "," +contador.lend_total+ "," +contador.receive_total+ "," +
+                        contador.dispose_total+ "," +contador.query_successful+ "," +contador.query_failed+ "," +
+                        contador.lend_successful+ "," +contador.lend_failed+ "," +contador.receive_successful+ "," +
+                        contador.receive_failed+ "," +final_size+ "," +final_height+ "," +elapsed_seconds);
+
                 // Inicio Medición 2
                 elapsed_seconds = medir(operations, RedBlackBST);
                 estructura = "RedBlackBST";
                 final_size = RedBlackBST.size();
                 final_height = RedBlackBST.height();
-                csv.println(instancia+ "," +estructura+ "," +m+ "," +purchase_total+ "," +
-                        query_total+ "," +lend_total+ "," +receive_total+ "," +
-                        dispose_total+ "," +query_successful+ "," +query_failed+ "," +
-                        lend_successful+ "," +lend_failed+ "," +receive_successful+ "," +
-                        receive_failed+ "," +final_size+ "," +final_height+ "," +elapsed_seconds);
-                resetStats();
+                csv.println(instancia+ "," +estructura+ "," + m + "," +contador.purchase_total+ "," +
+                        contador.query_total+ "," +contador.lend_total+ "," +contador.receive_total+ "," +
+                        contador.dispose_total+ "," +contador.query_successful+ "," +contador.query_failed+ "," +
+                        contador.lend_successful+ "," +contador.lend_failed+ "," +contador.receive_successful+ "," +
+                        contador.receive_failed+ "," +final_size+ "," +final_height+ "," +elapsed_seconds);
+
                 validate(BST, RedBlackBST, m);
             }
             csv.close();
