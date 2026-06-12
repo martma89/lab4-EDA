@@ -67,9 +67,9 @@ public class Experiment {
                 executeQuery(index,op);
             } else if(op.getType() == OperationType.LEND){
                 executeLend(index,op);
-            } else if (op.getType() == OperationType . RECEIVE){
+            } else if (op.getType() == OperationType.RECEIVE){
                 executeReceive(index,op);
-            } else if (op.getType() == OperationType . DISPOSE){
+            } else if (op.getType() == OperationType.DISPOSE){
                 executeDispose(index,op);
             }
         }
@@ -102,6 +102,9 @@ public class Experiment {
                         dispose_total+ "," +query_successful+ "," +query_failed+ "," +
                         lend_successful+ "," +lend_failed+ "," +receive_successful+ "," +
                         receive_failed+ "," +final_size+ "," +final_height+ "," +elapsed_seconds);
+
+                purchase_total=0;query_total=0;lend_total=0;receive_total=0;dispose_total=0;query_successful=0;query_failed=0;lend_successful=0;lend_failed=0;receive_successful=0;receive_failed=0;
+
                 // Inicio Medición 2
                 elapsed_seconds = medir(operations, RedBlackBST);
                 estructura = "RedBlackBST";
@@ -112,6 +115,8 @@ public class Experiment {
                         dispose_total+ "," +query_successful+ "," +query_failed+ "," +
                         lend_successful+ "," +lend_failed+ "," +receive_successful+ "," +
                         receive_failed+ "," +final_size+ "," +final_height+ "," +elapsed_seconds);
+
+                purchase_total=0;query_total=0;lend_total=0;receive_total=0;dispose_total=0;query_successful=0;query_failed=0;lend_successful=0;lend_failed=0;receive_successful=0;receive_failed=0;
             }
             csv.close();
         }
