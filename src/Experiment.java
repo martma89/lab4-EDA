@@ -6,7 +6,10 @@ import java.util.ArrayList;
 public class Experiment {
     public static int query_successful,query_failed,lend_successful,lend_failed,receive_successful,receive_failed;
     public static int purchase_total, query_total, lend_total, receive_total, dispose_total;
-
+    public static void resetStats() {
+        purchase_total = 0; query_total = 0; lend_total = 0; receive_total = 0; dispose_total = 0;
+        query_successful = 0; query_failed = 0; lend_successful = 0; lend_failed = 0; receive_successful = 0; receive_failed = 0;
+    }
     public static void executePurchase(InventoryIndex index,InventoryOperation op){
         if(!index.contains(op.getKey())){
             index.put(op.getKey(),op.getItem());
@@ -18,7 +21,6 @@ public class Experiment {
         }
         purchase_total++;
     }
-    // TODO
     public static void executeQuery (InventoryIndex index,InventoryOperation operation){
         if(index.contains(operation.getKey())){
             InventoryItem item = index.get(operation.getKey());
@@ -77,17 +79,44 @@ public class Experiment {
 
         return elapsed;
     }
+    public static void validate(InventoryIndex bst, InventoryIndex RBbst, int m) {
+        if (bst.size() != RBbst.size()) {
+            System.err.println("Error de validación: Los tamaños finales no coinciden.");
+        }
 
+        // Verifica todos los items del inventario en vez de solo 100, asegurando correctitud total
+        for (Integer key : bst.keys()) {
+            InventoryItem item = bst.get(key);
+
+            // Reglas de inventario (stock no negativo y sumas consistentes)
+            if (item.getStockAvailable() < 0 || item.getStockOnLoan() < 0 || item.getStockTotal() < 0) {
+                System.err.println("Error de validación: Stock negativo detectado en key " + key);
+            }
+            if (item.getStockAvailable() + item.getStockOnLoan() != item.getStockTotal()) {
+                System.err.println("Error de validación: Inconsistencia matemática de stock en key " + key);
+            }
+
+            // Comparación de get() entre ambas estructuras
+            InventoryItem itemRB = RBbst.get(key);
+            if (itemRB == null || item.getId() != itemRB.getId()){
+                System.err.println("Error de validación: Diferencia de resultados entre BST y RedBlackBST en key " + key);
+            }
+        }
+        int opsTotalesEjecutadas = purchase_total + query_total + lend_total + receive_total + dispose_total;
+        if (opsTotalesEjecutadas != m){
+            System.err.println("Error de validación: Se ejecutaron " + opsTotalesEjecutadas + " en vez de "+m+" operaciones.");
+        }
+    }
     public static void main (String[] args) {
         int[] size = {12, 13, 14, 15, 16, 17, 18, 19};
         for (int i=0;i<size.length;i++){
             Out csv = new Out();
             int t = size[i];
+            int m = (int)Math.pow(2,t);
+            int keyUniverse = 4*m;
             for(int instancia=0;instancia<30;instancia++){
-                int m = (int)Math.pow(2,t);
                 long seed = m + instancia;
                 StdRandom.setSeed(seed);
-                int keyUniverse = 4*m;
                 DataGenerator generator = new DataGenerator();
                 ArrayList<InventoryOperation>operations = generator.generateOperations(m,keyUniverse,seed);
                 BSTInventoryIndex BST = new BSTInventoryIndex();
@@ -102,9 +131,7 @@ public class Experiment {
                         dispose_total+ "," +query_successful+ "," +query_failed+ "," +
                         lend_successful+ "," +lend_failed+ "," +receive_successful+ "," +
                         receive_failed+ "," +final_size+ "," +final_height+ "," +elapsed_seconds);
-
-                purchase_total=0;query_total=0;lend_total=0;receive_total=0;dispose_total=0;query_successful=0;query_failed=0;lend_successful=0;lend_failed=0;receive_successful=0;receive_failed=0;
-
+                resetStats();
                 // Inicio Medición 2
                 elapsed_seconds = medir(operations, RedBlackBST);
                 estructura = "RedBlackBST";
@@ -115,8 +142,8 @@ public class Experiment {
                         dispose_total+ "," +query_successful+ "," +query_failed+ "," +
                         lend_successful+ "," +lend_failed+ "," +receive_successful+ "," +
                         receive_failed+ "," +final_size+ "," +final_height+ "," +elapsed_seconds);
-
-                purchase_total=0;query_total=0;lend_total=0;receive_total=0;dispose_total=0;query_successful=0;query_failed=0;lend_successful=0;lend_failed=0;receive_successful=0;receive_failed=0;
+                resetStats();
+                validate(BST, RedBlackBST, m);
             }
             csv.close();
         }
