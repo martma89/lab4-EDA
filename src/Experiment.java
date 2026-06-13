@@ -93,10 +93,10 @@ public class Experiment {
             InventoryItem itemRedBlackBST = redblackbst.get(randomKey);
 
             // Comparar getters.
-            if (itemBST == null && itemRedBlackBST != null || itemBST != null && itemRedBlackBST == null) {
+            if ((itemBST == null) != (itemRedBlackBST == null)) {
                 System.err.println("Error: Resultados distintos en BST y RedBlackBST en key: " + randomKey);
             }
-            else if (itemBST != null && itemRedBlackBST != null && itemBST.getId() != itemRedBlackBST.getId()) {
+            else if (itemBST != null && itemBST.getId() != itemRedBlackBST.getId()) {
                 System.err.println("Error: Resultados distintos en BST y RedBlackBST en key: " + randomKey);
             }
         }
