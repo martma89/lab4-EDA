@@ -48,7 +48,7 @@ public class InventoryItem {
         return false;
     }
     public boolean receive(int ItemId, int quantity){
-        // No se puede prestar más de lo prestado
+        // No se puede recibir más de lo prestado
         if(this.id==ItemId && stockOnLoan>=quantity && quantity>=0) {
             stockOnLoan -= quantity;
             stockAvailable += quantity;
