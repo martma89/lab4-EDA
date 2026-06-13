@@ -1,5 +1,7 @@
 import edu.princeton.cs.algs4.Out;
 import edu.princeton.cs.algs4.StopwatchCPU;
+
+import java.io.File;
 import java.util.ArrayList;
 
 public class Experiment {
@@ -23,7 +25,7 @@ public class Experiment {
     }
     public static void executeQuery (InventoryIndex index,InventoryOperation operation){
         if(index.contains(operation.getKey())){
-            InventoryItem item = index.get(operation.getKey()); // Lectura.
+            index.get(operation.getKey()); // Lectura.
             contar.query_successful++;
         }
         else contar.query_failed++;
@@ -80,32 +82,62 @@ public class Experiment {
         if(bst.size() != redblackbst.size()){
             System.err.println("Error: tamaño de los arreglos bst y redblackbst no coinciden");
         }
-        // Se verifica cada item
+
+        int keyUniverse = 4 * m;
+
+        // Se verifica 100 claves aleatorias
+        for (int i = 0; i < 100; i++) {
+            int randomKey = edu.princeton.cs.algs4.StdRandom.uniformInt(1, keyUniverse + 1);
+
+            InventoryItem itemBST = bst.get(randomKey);
+            InventoryItem itemRedBlackBST = redblackbst.get(randomKey);
+
+            // Comparar getters.
+            if (itemBST == null && itemRedBlackBST != null || itemBST != null && itemRedBlackBST == null) {
+                System.err.println("Error: Resultados distintos en BST y RedBlackBST en key: " + randomKey);
+            }
+            else if (itemBST != null && itemRedBlackBST != null && itemBST.getId() != itemRedBlackBST.getId()) {
+                System.err.println("Error: Resultados distintos en BST y RedBlackBST en key: " + randomKey);
+            }
+        }
+
+        // Se aplican reglas de validación
         for (Integer key : bst.keys()){
             InventoryItem itemBST = bst.get(key);
 
-            // Se aplican reglas de validación
             if (itemBST.getStockAvailable() < 0 || itemBST.getStockOnLoan() < 0 || itemBST.getStockTotal() < 0) {
                 System.err.println("Error: Stock negativo en key: " + key);
             }
             if (itemBST.getStockAvailable() + itemBST.getStockOnLoan() != itemBST.getStockTotal()) {
                 System.err.println("Error: Inconsistencia de stock en key: " + key);
             }
-            // Comparar getters.
-            InventoryItem itemRedBlackBST = redblackbst.get(key);
-            if (itemRedBlackBST == null || itemBST.getId() != itemRedBlackBST.getId()) {
-                System.err.println("Error: Resultados distintos en BST y RedBlackBST en key: " + key);
-            }
         }
+
+        // Se validan operaciones
         int opsTotalesEjecutadas = contar.purchase_total + contar.query_total + contar.lend_total + contar.receive_total + contar.dispose_total;
         if (opsTotalesEjecutadas != m) {
-            System.err.println("Error: se ejecutaron " + opsTotalesEjecutadas + "y no " + m + " operaciones");
+            System.err.println("Error: se ejecutaron " + opsTotalesEjecutadas + " y no " + m + " operaciones");
         }
+    }
+    public static void guardarCSV(Out csv, int instancia, String estructura, int m, int final_size, int final_height, double elapsed_seconds) {
+        csv.println(instancia + "," + estructura + "," + m + "," + contar.purchase_total + "," +
+                contar.query_total + "," + contar.lend_total + "," + contar.receive_total + "," +
+                contar.dispose_total + "," + contar.query_successful + "," + contar.query_failed + "," +
+                contar.lend_successful + "," + contar.lend_failed + "," + contar.receive_successful + "," +
+                contar.receive_failed + "," + final_size + "," + final_height + "," + elapsed_seconds);
     }
 
     public static void main (String[] args) {
         // Tamaños
         int[] size = {12, 13, 14, 15, 16, 17, 18, 19};
+
+        // Crea carpeta data si no existe;
+        File carpeta = new File("data");
+        if(!carpeta.exists()){
+           if(!carpeta.mkdirs()){
+               System.err.println("Error: No se pudo crear la carpeta.");
+           }
+        }
 
         for (int t : size) {
             int m = (int) Math.pow(2, t);
@@ -126,32 +158,17 @@ public class Experiment {
 
                 // Inicio Medición 1
                 contar = new Contar();
-                double elapsed_seconds = medir(operations, BST);
+                double elapsed_BST = medir(operations, BST);
 
-                String estructura = "BST";
-                int final_size = BST.size();
-                int final_height = BST.height();
-
-                csv.println(instancia + "," + estructura + "," + m + "," + contar.purchase_total + "," +
-                        contar.query_total + "," + contar.lend_total + "," + contar.receive_total + "," +
-                        contar.dispose_total + "," + contar.query_successful + "," + contar.query_failed + "," +
-                        contar.lend_successful + "," + contar.lend_failed + "," + contar.receive_successful + "," +
-                        contar.receive_failed + "," + final_size + "," + final_height + "," + elapsed_seconds);
+                guardarCSV(csv, instancia, "BST", m, BST.size(), BST.height(), elapsed_BST);
 
                 // Inicio Medición 2
                 contar = new Contar(); // Se reinicia el contador
-                elapsed_seconds = medir(operations, RedBlackBST);
+                double elapsed_RedBlackBST = medir(operations, RedBlackBST);
 
-                estructura = "RedBlackBST";
-                final_size = RedBlackBST.size();
-                final_height = RedBlackBST.height();
+                guardarCSV(csv, instancia, "RedBlackBST", m, RedBlackBST.size(), RedBlackBST.height(), elapsed_RedBlackBST);
 
-                csv.println(instancia + "," + estructura + "," + m + "," + contar.purchase_total + "," +
-                        contar.query_total + "," + contar.lend_total + "," + contar.receive_total + "," +
-                        contar.dispose_total + "," + contar.query_successful + "," + contar.query_failed + "," +
-                        contar.lend_successful + "," + contar.lend_failed + "," + contar.receive_successful + "," +
-                        contar.receive_failed + "," + final_size + "," + final_height + "," + elapsed_seconds);
-
+                // Validación de datos
                 validar(BST, RedBlackBST, m);
             }
             csv.close();

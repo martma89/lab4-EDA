@@ -1,7 +1,7 @@
 public class InventoryOperation {
-    private OperationType type;
-    private int key, quantity;
-    private InventoryItem item;
+    private final OperationType type;
+    private final int key, quantity;
+    private final InventoryItem item;
     public InventoryOperation (OperationType type, int key, int quantity, InventoryItem item) {
         this.type = type;
         this.key = key;

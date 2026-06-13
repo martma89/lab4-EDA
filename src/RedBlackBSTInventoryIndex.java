@@ -1,7 +1,7 @@
 import edu.princeton.cs.algs4.RedBlackBST;
 
 public class RedBlackBSTInventoryIndex implements InventoryIndex {
-    private RedBlackBST<Integer, InventoryItem> st;
+    private final RedBlackBST<Integer, InventoryItem> st = new RedBlackBST<>();
     @Override
     public void put (Integer key, InventoryItem value) {
         st.put(key, value);

@@ -1,7 +1,7 @@
 import edu.princeton.cs.algs4.BST;
 
 public class BSTInventoryIndex implements InventoryIndex{
-    private BST<Integer, InventoryItem> st;
+    private final BST<Integer, InventoryItem> st = new BST<>();
 
     @Override
     public void put(Integer key, InventoryItem value){
