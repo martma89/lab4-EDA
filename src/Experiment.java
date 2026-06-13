@@ -80,7 +80,7 @@ public class Experiment {
     }
     public static void validar(InventoryIndex bst,InventoryIndex redblackbst, int m){
         if(bst.size() != redblackbst.size()){
-            System.err.println("Error: tamaño de los arreglos bst y redblackbst no coinciden");
+            throw new IllegalStateException("Error: tamaño de los arreglos bst y redblackbst no coinciden");
         }
 
         int keyUniverse = 4 * m;
@@ -94,10 +94,10 @@ public class Experiment {
 
             // Comparar getters.
             if ((itemBST == null) != (itemRedBlackBST == null)) {
-                System.err.println("Error: Resultados distintos en BST y RedBlackBST en key: " + randomKey);
+                throw new IllegalStateException("Error: Resultados distintos de existencia en BST y RedBlackBST en key: " + randomKey);
             }
             else if (itemBST != null && itemBST.getId() != itemRedBlackBST.getId()) {
-                System.err.println("Error: Resultados distintos en BST y RedBlackBST en key: " + randomKey);
+                throw new IllegalStateException("Error: Resultados distintos de ID en BST y RedBlackBST en key: " + randomKey);
             }
         }
 
@@ -106,17 +106,17 @@ public class Experiment {
             InventoryItem itemBST = bst.get(key);
 
             if (itemBST.getStockAvailable() < 0 || itemBST.getStockOnLoan() < 0 || itemBST.getStockTotal() < 0) {
-                System.err.println("Error: Stock negativo en key: " + key);
+                throw new IllegalStateException("Error: Stock negativo en key: " + key);
             }
             if (itemBST.getStockAvailable() + itemBST.getStockOnLoan() != itemBST.getStockTotal()) {
-                System.err.println("Error: Inconsistencia de stock en key: " + key);
+                throw new IllegalStateException("Error: Inconsistencia de stock en key: " + key);
             }
         }
 
         // Se validan operaciones
         int opsTotalesEjecutadas = contar.purchase_total + contar.query_total + contar.lend_total + contar.receive_total + contar.dispose_total;
         if (opsTotalesEjecutadas != m) {
-            System.err.println("Error: se ejecutaron " + opsTotalesEjecutadas + " y no " + m + " operaciones");
+            throw new IllegalStateException("Error: se ejecutaron " + opsTotalesEjecutadas + " y no " + m + " operaciones");
         }
     }
     public static void guardarCSV(Out csv, int instancia, String estructura, int m, int final_size, int final_height, double elapsed_seconds) {
